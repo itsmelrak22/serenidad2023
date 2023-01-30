@@ -28,7 +28,7 @@ class Model
     public function connectActual(){
         
         try {
-            $this->pdo = new PDO("postgres://brtayannfktyds:007bdc9cd0a6e10b4e13816193f95c53d52b2a4632ba7f9e0f2ac36ff21aafa2@ec2-44-205-177-160.compute-1.amazonaws.com:5432/db5ca19hpv9dl2");
+            $this->pdo = new PDO("mysql:host=localhost;dbname=u286424252_serenidad_2023;charset=utf8","u286424252_root","SerenidadSuites2023");
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             
