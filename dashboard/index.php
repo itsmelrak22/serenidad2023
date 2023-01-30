@@ -6,17 +6,18 @@ spl_autoload_register(function ($class) {
 });
 
 // header('Content-Type: application/json; charset=utf-8');
-
 $msg = '';
 $status = '';
+if(isset($_SESSION['success'])){
+    $status = 'success';
+    $msg = $_SESSION['success'];
+    unset($_SESSION['success']);
+      
+}
 $id = $_SESSION['client-id'];
 $conn = new Transaction;
-$transactions = $conn->setQuery("SELECT A.*, B.username , C.room_type, C.price  FROM `transactions` A 
-                                INNER JOIN `guest` B
-                                ON A.guest_id = B.id
-                                INNER JOIN `room` C
-                                ON A.room_id = C.id
-                                WHERE A.guest_id = $id")->getAll();
+$transactions = $conn->getAllUserTransactions($id);
+
 
 // echo '<pre>';
 // echo print_r($transactions);
@@ -46,6 +47,18 @@ $transactions = $conn->setQuery("SELECT A.*, B.username , C.room_type, C.price  
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+
+                    <?php
+                        if($status == 'success'){
+                            echo    '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Done!</strong>'. $msg. '.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
+                        }
+
+                    ?>
                 
                     <!-- Content Row -->
                     <div class="row">
@@ -72,6 +85,7 @@ $transactions = $conn->setQuery("SELECT A.*, B.username , C.room_type, C.price  
                                             <th> Extra Pax </th>
                                             <th> Bill </th>
                                             <th> Payment </th>
+                                            <th> Balance </th>
                                             <th> Valid until </th>
                                             <th> Actions </th>
                                         </tr>
@@ -89,13 +103,28 @@ $transactions = $conn->setQuery("SELECT A.*, B.username , C.room_type, C.price  
                                                 <td> <?=$value->extra_pax ?> </td>
                                                 <td> <?=$value->bill ?> </td>
                                                 <td> <?=$value->payment ?> </td>
+                                                <td> <?=$value->balance ?> </td>
                                                 <td> <?=$value->valid_until ?> </td>
                                                 <td>
-                                                    <span data-toggle="tooltip" data-placement="top" title="Process Downpayment">
-                                                        <button class="btn btn-info btn-circle" data-toggle="modal" data-target="#paymentModal" onClick="settleTransaction(<?= $value->id ?>)">
-                                                            <i class="fas fa-check"></i>
-                                                        </button> 
-                                                    </span>
+                                                    <?php if($value->status == 'Pending'){ ?>
+                                                        <span data-toggle="tooltip" data-placement="top" title="Process Downpayment">
+                                                            <button class="btn btn-info btn-circle" data-toggle="modal" data-target="#paymentModal" onClick="getUserTransaction(<?= $value->id ?>)">
+                                                                <i class="fas fa-check"></i>
+                                                            </button> 
+                                                        </span>
+                                                    <?php }else if($value->status == 'Reserved' || $value->status == 'Check In'){?>
+                                                        <span>
+                                                            Transaction Reserved/Checkin
+                                                        </span>
+                                                    <?php }else if($value->status == 'Check Out'){?>
+                                                        <span>
+                                                            Transaction Completed
+                                                        </span>
+                                                    <?php }else{?>
+                                                        <span>
+                                                            Transaction Expired / Failed
+                                                        </span>
+                                                    <?php }?>
                                                 </td>
                                             </tr>
                                         <?php  } ?>

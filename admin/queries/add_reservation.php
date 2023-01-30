@@ -9,9 +9,35 @@ header('Content-Type: application/json; charset=utf-8');
 
 // print_r($_POST);
 // exit(0);
+    $today = date('Y-m-d H:i:s');
+    $uuid = uuid4();
 
     $conn = new Guest;
-    $client = $conn->find($_POST['client-id']);
+    if(isset($_POST['client-id'])){
+        $client = $conn->find($_POST['client-id']);
+    }else{
+
+        $firstname = $_POST['firstname'];
+        $middlename = $_POST['middlename'];
+        $lastname = $_POST['lastname'];
+        $contact = $_POST['contact'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $guest = new Guest();
+        $checkUsername = $guest->setQuery("SELECT * FROM `guest` WHERE `username` LIKE '$username'")->getAll();
+        if(count($checkUsername) > 0){
+            $_SESSION["username-taken"] = "Username Already Taken!";
+            header("Location: ../");
+            exit(0);
+        }
+
+
+        $guest->setQuery("INSERT INTO `guest` (`uuid`, `firstname`,`username`, `password`, `middlename`, `lastname`, `contactno`,  `created_at`, `updated_at`) 
+                            VALUES ('$uuid', '$firstname', '$username', '$password', '$middlename', '$lastname', '$contact', '$today', '$today' )");
+        $lastInsertedGuestId = $guest->getLastInsertedId();
+        $client = $conn->find($lastInsertedGuestId);
+    }
 
 
     function uuid4() {
@@ -60,8 +86,6 @@ header('Content-Type: application/json; charset=utf-8');
 
     try {
             
-        $uuid = uuid4();
-        $today = date('Y-m-d H:i:s');
         $room_id = $_POST['room_id'];
         $roomData = new Room;
         $room = $roomData->find($room_id);
@@ -78,7 +102,7 @@ header('Content-Type: application/json; charset=utf-8');
 
         $transaction = new Transaction();
         $transaction->setQuery("INSERT INTO `transactions` (`guest_id`, `room_id`,  `extra_bed`,  `extra_pax`, `status`, `days`, `checkin`, `checkout`, `bill`, `valid_until`, `created_at`, `updated_at`) 
-                            VALUES ('$client->id', '$room_id',  '$additional_bed', '$additinal_pax', 'PENDING', '$days', '$check_in', '$check_out', '$bill', '$valid_until', '$today', '$today' )");
+                            VALUES ('$client->id', '$room_id',  '$additional_bed', '$additinal_pax', 'Pending', '$days', '$check_in', '$check_out', '$bill', '$valid_until', '$today', '$today' )");
 
        $lastTransactionId = $transaction->getLastInsertedId();
 

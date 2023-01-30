@@ -3,6 +3,26 @@
 Class Transaction extends Model {
 
     protected $table = 'transactions';
+
+    public function getAllUserTransactions($id){
+        return $this->setQuery("SELECT A.*, B.username , B.firstname , B.middlename , B.lastname , C.room_type, C.price  FROM `transactions` A 
+                                INNER JOIN `guest` B
+                                ON A.guest_id = B.id
+                                INNER JOIN `room` C
+                                ON A.room_id = C.id
+                                WHERE A.guest_id = $id")->getAll();
+        
+    }
+
+    public function getUserTransaction($id){
+        return $this->setQuery("SELECT A.*, B.firstname , B.middlename , B.lastname, C.room_type, C.price  FROM `transactions` A 
+                                INNER JOIN `guest` B
+                                ON A.guest_id = B.id
+                                INNER JOIN `room` C
+                                ON A.room_id = C.id
+                                WHERE A.id = $id")->getFirst();
+        
+    }
     
     public function getNotifData(){
         return $this->setQuery("SELECT

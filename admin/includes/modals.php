@@ -135,8 +135,16 @@
                                                         </div>
                                                 </div>
                                             </div>
-                                            
 
+                                            <div class="form-group">
+                                                <input name="username" type="text" class="form-control form-control-user"  placeholder="Username" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="password" type="password" class="form-control form-control-user"  placeholder="Password" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="confirm-password" type="password" class="form-control form-control-user"  placeholder="Confirm Password" required>
+                                            </div>
                                             <div class="form-group">
                                                 <input name="firstname" type="text" class="form-control form-control-user"  placeholder="Fistname" required>
                                             </div>

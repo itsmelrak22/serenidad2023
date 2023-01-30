@@ -91,13 +91,15 @@ if(isset($_SESSION['error'])){
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button> <br>
-                                        <a href="#">
-                                            <button class="btn btn-info btn-user btn-block">
-                                                Register
-                                            </button>
-                                        </a>
+                                        
+                                        
                                     </form>
-                                    
+
+                                    <a href="client-register.php">
+                                        <button class="btn btn-info btn-user btn-block">
+                                            Register
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

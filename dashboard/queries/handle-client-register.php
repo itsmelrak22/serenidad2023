@@ -48,6 +48,14 @@ $today = date('Y-m-d H:i:s');
 
 
 $guest = new Guest;
+
+$checkUsername = $guest->setQuery("SELECT * FROM `guest` WHERE `username` LIKE '$username'")->getAll();
+if(count($checkUsername) > 0){
+    $_SESSION["username-taken"] = "Username Already Taken!";
+    header('Location: ../../client-register.php');
+    exit(0);
+}
+
 try {
     $guest->setQuery("INSERT INTO `guest` (`uuid`, `firstname`, `username`, `password`, `middlename`, `lastname`, `contactno`,  `created_at`, `updated_at`) VALUES ('$uuid', '$firstname', '$username', '$password', '$middlename', '$lastname', '$contact_no', '$today', '$today' )");
 

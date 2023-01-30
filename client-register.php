@@ -11,6 +11,11 @@ if(isset($_SESSION['error'])){
     $msg = $_SESSION['error'];
     unset($_SESSION['error']);
 }
+if(isset($_SESSION['username-taken'])){
+    $status = 'username-taken';
+    $msg = $_SESSION['username-taken'];
+    unset($_SESSION['username-taken']);
+}
 
 
 ?>
@@ -46,6 +51,7 @@ if(isset($_SESSION['error'])){
 
         <!-- Outer Row -->
         <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9" style="margin-top: 100px !important; ">
 
             <?php
                     if($status == 'error'){
@@ -56,10 +62,16 @@ if(isset($_SESSION['error'])){
                                     </button>
                                 </div>';
                     }
+                    if($status == 'username-taken'){
+                        echo    '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>' .$msg.'</strong> 
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                    }
         
             ?>
-
-            <div class="col-xl-10 col-lg-12 col-md-9" style="margin-top: 100px !important; ">
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">

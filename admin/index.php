@@ -48,6 +48,18 @@ if(isset($_SESSION['login-success'])){
     unset($_SESSION['login-success']);
 }
 
+if(isset($_SESSION['username-taken'])){
+    $status = 'username-taken';
+    $msg = $_SESSION['username-taken'];
+    unset($_SESSION['username-taken']);
+}
+
+if(isset($_SESSION['username-taken'])){
+    $status = 'username-taken';
+    $msg = $_SESSION['username-taken'];
+    unset($_SESSION['username-taken']);
+}
+
 
 
 $connection = new \Transaction();
@@ -144,6 +156,13 @@ $pending = $connection->setQuery("SELECT
                         }else if($status == 'error'){
                             echo    '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <strong>Server Error!</strong> .
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
+                        }else if($status == 'username-taken'){
+                            echo    '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>'. $msg .'</strong> .
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
